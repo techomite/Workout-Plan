@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1084547589666",
+    "project_id": "workout-plan-66ffa",
+    "storage_bucket": "workout-plan-66ffa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1084547589666:android:090551ab77c372f8f9cc7b",
+        "android_client_info": {
+          "package_name": "com.andromite.workoutplan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1084547589666-u18r06420k9d0s11avcdakesd4eagd51.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.andromite.workoutplan",
+            "certificate_hash": "df4749e2e18b169e160e2aaeab3bed73f26d7f8c"
+          }
+        },
+        {
+          "client_id": "1084547589666-ciovc8bbhfgdsd4fjt1qkoelcrfpsrk5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKeq-64pRgtjaRNKIyrZRV2zNRjfkri0I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1084547589666-ciovc8bbhfgdsd4fjt1qkoelcrfpsrk5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
