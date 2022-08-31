@@ -2,6 +2,7 @@ package com.andromite.workoutplan.utils
 
 enum class Enums {
 
-    UserId
+    UserId,
+    Users
 
 }
