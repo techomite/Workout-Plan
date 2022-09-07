@@ -17,56 +17,35 @@ import com.google.firebase.remoteconfig.ktx.get
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SplashScreenActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var remoteConfig: FirebaseRemoteConfig
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
-        
-        if (!SP.get(this,Enums.UserId.name).equals("0")){
-           callRemoteConfig()
-        } else {
-            startActivity(Intent(this, SignInActivity::class.java))
-        }
-        
+
+        if (!SP.get(this, Enums.UserId.name).equals("0")) {
+            diRemoteConfig()
+        } else startActivity(Intent(this, SignInActivity::class.java))
+
     }
 
-    fun callRemoteConfig() {
-        val remoteConfig: FirebaseRemoteConfig = Firebase.remoteConfig
-        val configSettings = remoteConfigSettings {
-            minimumFetchIntervalInSeconds = 3600
-        }
-        remoteConfig.setConfigSettingsAsync(configSettings)
-        remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)
+    private fun diRemoteConfig() {
+        val sampleJsonString = remoteConfig.get("workouts").asString()
+        val template: TemplateResponse =
+            Gson().fromJson(sampleJsonString, TemplateResponse::class.java)
 
-        val sameleJsonString = remoteConfig.get("sample_workout_list").asString()
-//        Utils.floge("sample workout json from RC: ${sameleJsonString}")
-
-        val template: TemplateResponse = Gson().fromJson(sameleJsonString, TemplateResponse::class.java)
-
-        for (i in 0..template.size-1) {
-            Utils.floge("template item: name: ${template.get(i).name} type:${template.get(i).type} list of workouts: ${template.get(i).workoutList}")
+        for (i in 0 until template.size) {
+            Utils.floge("template item: name: ${template[i].name} type:${template[i].type} list of workouts: ${template[i].workoutList}")
         }
 
-
-            remoteConfig.fetchAndActivate()
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        val updated = task.result
-                        Utils.floge("Config params updated: $updated")
-                        Toast.makeText(
-                            this, "Fetch and activate succeeded",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        Toast.makeText(
-                            this, "Fetch failed",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                    startActivity(Intent(this, HomeActivity::class.java))
-                }
-
-
-        }
+        startActivity(Intent(this, HomeActivity::class.java))
     }
+
+}

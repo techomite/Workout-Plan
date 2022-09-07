@@ -1,6 +1,7 @@
 package com.andromite.workoutplan.utils
 
 import android.app.Activity
+import android.content.Context
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -17,6 +18,10 @@ class Utils {
         fun floge(value: Any) {
             if (Constants.ENABLE_LOGS)
                 Log.e("asdfasdf", ":-: $value :-:")
+        }
+
+        fun isUserLoggedIn(context: Context): Boolean {
+            return SP.get(context, Enums.UserId.name) != "0"
         }
 
         fun hideKeyboard(activity: Activity) {
