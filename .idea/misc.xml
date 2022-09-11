@@ -9,6 +9,8 @@
         <entry key="..\:/WorkoutPlan/app/src/main/res/layout/activity_main.xml" value="0.23229166666666667" />
         <entry key="..\:/WorkoutPlan/app/src/main/res/layout/activity_sign_in.xml" value="0.23229166666666667" />
         <entry key="..\:/WorkoutPlan/app/src/main/res/layout/activity_splash_screen.xml" value="0.23229166666666667" />
+        <entry key="..\:/WorkoutPlan/app/src/main/res/layout/fragment_edit_workout.xml" value="0.23229166666666667" />
+        <entry key="..\:/WorkoutPlan/app/src/main/res/layout/fragment_view_workout.xml" value="0.23229166666666667" />
         <entry key="..\:/WorkoutPlan/app/src/main/res/menu/bottom_navigation.xml" value="0.23229166666666667" />
         <entry key="..\:/WorkoutPlan/app/src/main/res/xml/remote_config_defaults.xml" value="0.23229166666666667" />
       </map>
