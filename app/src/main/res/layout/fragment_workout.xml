@@ -3,20 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FF0000"
-    tools:context=".ui.home.EditWorkoutFragment">
+    android:background="#FFEB3B"
+    tools:context=".ui.workout.WorkoutFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Edit Workout Fragment" />
-
-    <Button
-        android:id="@+id/click"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="click"
-        />
+        android:text="Workout fragment" />
 
 </FrameLayout>
