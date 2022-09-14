@@ -48,7 +48,7 @@ class EditWorkoutActivity : AppCompatActivity() {
         val adapter = WorkoutPagerAdapter(this)
 
         for (item in list){
-            adapter.add(WorkoutFragment())
+            adapter.add(WorkoutFragment(item.type))
             binding.tabLayout.addTab(binding.tabLayout.newTab().setText(item.type))
         }
 

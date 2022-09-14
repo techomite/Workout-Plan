@@ -13,7 +13,8 @@
         <entry key="..\:/WorkoutPlan/app/src/main/res/layout/fragment_calendar.xml" value="0.23229166666666667" />
         <entry key="..\:/WorkoutPlan/app/src/main/res/layout/fragment_edit_workout.xml" value="0.23229166666666667" />
         <entry key="..\:/WorkoutPlan/app/src/main/res/layout/fragment_view_workout.xml" value="0.23229166666666667" />
-        <entry key="..\:/WorkoutPlan/app/src/main/res/layout/fragment_workout.xml" value="0.34479166666666666" />
+        <entry key="..\:/WorkoutPlan/app/src/main/res/layout/fragment_workout.xml" value="0.264" />
+        <entry key="..\:/WorkoutPlan/app/src/main/res/layout/layout_workout_item.xml" value="0.23125" />
         <entry key="..\:/WorkoutPlan/app/src/main/res/menu/bottom_navigation.xml" value="0.23229166666666667" />
         <entry key="..\:/WorkoutPlan/app/src/main/res/xml/remote_config_defaults.xml" value="0.23229166666666667" />
       </map>

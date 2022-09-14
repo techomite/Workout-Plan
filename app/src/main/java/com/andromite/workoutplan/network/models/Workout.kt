@@ -7,5 +7,6 @@ data class Workout(
     @SerializedName("name")
     val name: String? = null,
     @SerializedName("sets")
-    val sets: Int? = null
+    val sets: Int? = null,
+    var checked : Boolean = false
 )

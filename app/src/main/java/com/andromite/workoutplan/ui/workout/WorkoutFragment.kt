@@ -5,56 +5,64 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.andromite.workoutplan.R
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.andromite.workoutplan.databinding.FragmentWorkoutBinding
+import com.andromite.workoutplan.network.models.Workout
+import com.andromite.workoutplan.network.models.WorkoutListItem
+import com.andromite.workoutplan.network.models.WorkoutListResponse
+import com.andromite.workoutplan.utils.Utils
+import dagger.hilt.android.AndroidEntryPoint
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+@AndroidEntryPoint
+class WorkoutFragment(var type : String?) : Fragment() {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [WorkoutFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class WorkoutFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    lateinit var binding : FragmentWorkoutBinding
+    lateinit var viewModel: WorkoutSharedViewModel
+    var workoutList = ArrayList<WorkoutListItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_workout, container, false)
+    ): View {
+        binding = FragmentWorkoutBinding.inflate(layoutInflater)
+        viewModel = ViewModelProvider(this)[WorkoutSharedViewModel::class.java]
+
+        registerDataRequest()
+
+
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment WorkoutFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            WorkoutFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private fun registerDataRequest() {
+        viewModel.workoutList.observe(requireActivity()){
+            it.list?.get(0)?.workoutList?.get(0)?.checked = true
+            getListFromType(it)
+        }
+        viewModel.getWorkoutList()
     }
+
+    fun getListFromType(workoutListResponse: WorkoutListResponse) {
+        workoutList = workoutListResponse.list as ArrayList<WorkoutListItem>
+
+        var adapter = WorkoutListAdapter()
+        val manager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.listRV.layoutManager = manager
+        binding.listRV.adapter = adapter
+
+        for (item in workoutListResponse.list){
+            if (item.type == type){
+                Utils.floge("$item")
+                adapter.addAll(item.workoutList as MutableList<Workout>)
+            }
+
+        }
+    }
+
+
 }
