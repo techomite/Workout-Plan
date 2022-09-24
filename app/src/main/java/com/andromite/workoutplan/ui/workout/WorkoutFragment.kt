@@ -5,21 +5,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.andromite.workoutplan.databinding.FragmentWorkoutBinding
 import com.andromite.workoutplan.network.models.Workout
 import com.andromite.workoutplan.network.models.WorkoutListItem
-import com.andromite.workoutplan.network.models.WorkoutListResponse
 import com.andromite.workoutplan.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class WorkoutFragment(var type : String?) : Fragment() {
+class WorkoutFragment(var type: String?, var viewModel: WorkoutSharedViewModel) : Fragment(), WorkoutListAdapter.WorkoutItemClickListener {
 
 
     lateinit var binding : FragmentWorkoutBinding
-    lateinit var viewModel: WorkoutSharedViewModel
     var workoutList = ArrayList<WorkoutListItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +28,7 @@ class WorkoutFragment(var type : String?) : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentWorkoutBinding.inflate(layoutInflater)
-        viewModel = ViewModelProvider(this)[WorkoutSharedViewModel::class.java]
+
 
         registerDataRequest()
 
@@ -40,28 +37,30 @@ class WorkoutFragment(var type : String?) : Fragment() {
     }
 
     private fun registerDataRequest() {
-        viewModel.workoutList.observe(requireActivity()){
-            it.list?.get(0)?.workoutList?.get(0)?.checked = true
-            getListFromType(it)
+        viewModel.workoutListLiveData.observe(requireActivity()){
+            it?.get(0)?.workoutList?.get(0)?.checked = true
+            displaySelectedWorkoutList(it)
         }
-        viewModel.getWorkoutList()
     }
 
-    fun getListFromType(workoutListResponse: WorkoutListResponse) {
-        workoutList = workoutListResponse.list as ArrayList<WorkoutListItem>
+    private fun displaySelectedWorkoutList(workoutListResponse: List<WorkoutListItem>?) {
+        workoutList = workoutListResponse as ArrayList<WorkoutListItem>
 
-        var adapter = WorkoutListAdapter()
+        val adapter = WorkoutListAdapter(this, type)
         val manager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.listRV.layoutManager = manager
         binding.listRV.adapter = adapter
 
-        for (item in workoutListResponse.list){
+        for (item in workoutListResponse){
             if (item.type == type){
-                Utils.floge("$item")
-                adapter.addAll(item.workoutList as MutableList<Workout>)
+                Utils.floge("item $item")
+                adapter.addAll(workoutListResponse)
             }
-
         }
+    }
+
+    override fun workoutChecked(type: String?, selectedWorkout: Workout, checked : Boolean) {
+        viewModel.updateWorkoutItem(type, selectedWorkout, checked)
     }
 
 

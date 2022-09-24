@@ -8,44 +8,60 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.andromite.workoutplan.R
 import com.andromite.workoutplan.network.models.Workout
+import com.andromite.workoutplan.network.models.WorkoutListItem
 import com.andromite.workoutplan.utils.Utils
 
-class WorkoutListAdapter : RecyclerView.Adapter<WorkoutListAdapter.ViewHolder>() {
+class WorkoutListAdapter(var listener: WorkoutItemClickListener, var type: String?) :
+    RecyclerView.Adapter<WorkoutListAdapter.ViewHolder>() {
 
-    val list : MutableList<Workout> = ArrayList()
+    val list: MutableList<Workout> = ArrayList()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_workout_item,parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.layout_workout_item, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(list[position])
+        holder.bind(list[position], listener, type)
     }
 
     override fun getItemCount(): Int {
-        Utils.floge("item count: ${list.size}")
         return list.size
     }
 
-    class ViewHolder(view : View): RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         var checkBoxView = view.findViewById<CheckBox>(R.id.checkBoxView)
         var nameTextView = view.findViewById<TextView>(R.id.nameTextView)
         var setsTextView = view.findViewById<TextView>(R.id.setsTextView)
 
-        fun bind(workout: Workout) {
+        fun bind(workout: Workout, listener: WorkoutItemClickListener, type: String?) {
             checkBoxView.isChecked = workout.checked
             nameTextView.text = workout.name
             setsTextView.text = workout.sets.toString()
+
+            checkBoxView.setOnCheckedChangeListener { compoundButton, b ->
+                listener.workoutChecked(type, workout, b)
+            }
         }
     }
 
-    fun addAll(childItems: MutableList<Workout>) {
-        for(tor in childItems){
-            list.add(tor)
-            notifyItemInserted(list.size - 1)
+    fun addAll(childItems: List<WorkoutListItem>?) {
+        if (childItems != null) {
+            for (tor in childItems) {
+                if (tor.type.equals(type)) {
+                    for (item in tor.workoutList!!) {
+                        list.add(item)
+                    }
+                }
+                notifyItemInserted(list.size - 1)
+            }
         }
+    }
+
+    interface WorkoutItemClickListener {
+        fun workoutChecked(type: String?, selectedWorkout: Workout, checked : Boolean)
     }
 }
