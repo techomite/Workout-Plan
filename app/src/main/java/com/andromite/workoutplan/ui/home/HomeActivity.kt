@@ -45,6 +45,7 @@ class HomeActivity : AppCompatActivity() {
 
     fun initViewPager(){
         binding.pager.adapter = ViewPagerAdapter(this)
+        //asdfasdf
     }
 
 }
