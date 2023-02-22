@@ -7,6 +7,7 @@ enum class Enums {
 
     // remoteconfig values
     sample_workout_list,
-    workouts
+    workouts,
+    workoutList
 
 }

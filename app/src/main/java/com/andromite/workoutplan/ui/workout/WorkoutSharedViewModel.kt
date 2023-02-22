@@ -47,5 +47,9 @@ class WorkoutSharedViewModel @Inject constructor(var remoteConfig: FirebaseRemot
         }
     }
 
+    fun saveWorkToFirestoreDB() {
+
+    }
+
 
 }

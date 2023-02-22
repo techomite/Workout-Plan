@@ -1,10 +1,12 @@
 package com.andromite.workoutplan.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.andromite.workoutplan.R
 import com.andromite.workoutplan.databinding.ActivityMainBinding
+import com.andromite.workoutplan.ui.workout.EditWorkoutActivity
 import java.util.*
 
 class HomeActivity : AppCompatActivity() {
@@ -17,6 +19,7 @@ class HomeActivity : AppCompatActivity() {
         val root = binding.root
         setContentView(root)
 
+//        startActivity(Intent(this, EditWorkoutActivity::class.java))
         initViewPager()
         initBottomNav()
 

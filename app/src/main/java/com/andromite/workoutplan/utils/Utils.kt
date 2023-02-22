@@ -5,6 +5,8 @@ import android.content.Context
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class Utils {
@@ -35,5 +37,21 @@ class Utils {
             }
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0)
         }
+    }
+
+    fun getFormattedDate(date: Date): String {
+        val calendar = Calendar.getInstance()
+        calendar.time = date
+        calendar.set(Calendar.HOUR_OF_DAY,0)
+        calendar.set(Calendar.MINUTE,0)
+        calendar.set(Calendar.SECOND,0)
+        calendar.set(Calendar.MILLISECOND,0)
+        return calendar.timeInMillis.toString()
+    }
+
+    fun convertMillisecondsToDate(milliseconds : Long): String {
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val date = Date(milliseconds)
+        return sdf.format(date)
     }
 }

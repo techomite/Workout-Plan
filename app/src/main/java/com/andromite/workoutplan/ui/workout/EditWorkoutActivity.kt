@@ -7,6 +7,7 @@ import com.andromite.workoutplan.databinding.ActivityEditWorkoutBinding
 import com.andromite.workoutplan.network.models.WorkoutListItem
 import com.andromite.workoutplan.network.models.WorkoutListResponse
 import com.andromite.workoutplan.utils.Enums
+import com.andromite.workoutplan.utils.FireStoreUtils
 import com.andromite.workoutplan.utils.Utils
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -14,6 +15,7 @@ import com.google.firebase.remoteconfig.ktx.get
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import okio.Utf8
+import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -41,6 +43,16 @@ class EditWorkoutActivity : AppCompatActivity() {
 
         binding.saveButton.setOnClickListener {
             Utils.floge("save button final list: ${viewModel.getWorkoutList()}")
+            //            FireStoreUtils().readWorkoutList(this)
+
+
+            // convert the list to json format
+            // get string
+            // save to document as data
+
+            val gson = Gson()
+            val string = gson.toJson(viewModel.getWorkoutList())
+            FireStoreUtils().addOrUpdateWorkoutList(this, Utils().getFormattedDate(Date()),string)
         }
 
 
