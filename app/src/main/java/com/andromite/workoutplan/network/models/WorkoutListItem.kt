@@ -7,5 +7,5 @@ data class WorkoutListItem(
     @SerializedName("type")
     var type: String? = "",
     @SerializedName("workout_list")
-    var workoutList: List<Workout>? = listOf()
+    var workoutList: List<Workout> = listOf()
 )

@@ -5,5 +5,5 @@ import com.google.gson.annotations.SerializedName
 
 data class WorkoutListResponse(
     @SerializedName("list")
-    val list: List<WorkoutListItem>? = listOf()
+    val list: List<WorkoutListItem> = listOf()
 )

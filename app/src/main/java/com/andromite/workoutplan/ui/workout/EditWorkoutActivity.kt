@@ -2,6 +2,7 @@ package com.andromite.workoutplan.ui.workout
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import com.andromite.workoutplan.databinding.ActivityEditWorkoutBinding
 import com.andromite.workoutplan.network.models.WorkoutListItem
@@ -14,7 +15,6 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.get
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
-import okio.Utf8
 import java.util.*
 import javax.inject.Inject
 
@@ -26,6 +26,7 @@ class EditWorkoutActivity : AppCompatActivity() {
     @Inject
     lateinit var remoteConfig: FirebaseRemoteConfig
     lateinit var viewModel: WorkoutSharedViewModel
+    lateinit var date : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,36 +34,52 @@ class EditWorkoutActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         viewModel = ViewModelProvider(this)[WorkoutSharedViewModel::class.java]
-        viewModel.loadDefaultList()
+//        viewModel.loadDefaultList()
 
-        // display workout from remote config
-        // get selected workout objects and save them in firebase firestore
-        // view pager with fragments setup
+        initListener()
 
-        getWorkout()
+        val type = intent.getStringExtra("type")
 
+        if (type.equals("new")) {
+            // show default workout list
+            date = Utils().getFormattedDate(Date())
+            viewModel.loadDefaultList() {
+                getDefaultWorkout()
+            }
+
+        } else if (type.equals("update")) {
+            // fetch workout from db
+            date = intent.getStringExtra("date")!!
+            viewModel.fetchListFromDB(intent.getStringExtra("date"), this) {
+                getCustomWorkout(it)
+            }
+        }
+    }
+
+
+    private fun initListener() {
         binding.saveButton.setOnClickListener {
             Utils.floge("save button final list: ${viewModel.getWorkoutList()}")
-            //            FireStoreUtils().readWorkoutList(this)
-
-
-            // convert the list to json format
-            // get string
-            // save to document as data
-
             val gson = Gson()
             val string = gson.toJson(viewModel.getWorkoutList())
             FireStoreUtils().addOrUpdateWorkoutList(this, Utils().getFormattedDate(Date()),string)
         }
-
-
     }
 
-    private fun getWorkout() {
+    private fun getDefaultWorkout() {
         val string = remoteConfig[Enums.workouts.name].asString()
         val template: WorkoutListResponse = Gson().fromJson(string, WorkoutListResponse::class.java)
 
-        template.list?.let { initViewPagerAndTabLayout(it) }
+        initViewPagerAndTabLayout(template.list)
+    }
+
+    private fun getCustomWorkout(list: List<WorkoutListItem>) {
+//        val string = remoteConfig[Enums.workouts.name].asString()
+//        val template: WorkoutListResponse = Gson().fromJson(string, WorkoutListResponse::class.java)
+//
+//        template.list?.let { initViewPagerAndTabLayout(it) }
+        Log.e("asdfasdf", "inside getCustomWorkout $list")
+        initViewPagerAndTabLayout(list)
     }
 
     private fun initViewPagerAndTabLayout(list: List<WorkoutListItem>) {

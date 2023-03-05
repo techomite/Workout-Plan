@@ -12,7 +12,7 @@ class WorkoutHelper {
             val gson = Gson()
             val finalWorkoutItemList = ArrayList<WorkoutListItem>()
 
-            if (jsonString != null) {
+            if (jsonString != "null") {
                 val response: List<WorkoutListItem> =
                     gson.fromJson(jsonString, Array<WorkoutListItem>::class.java).asList()
 
