@@ -7,6 +7,11 @@
     android:padding="20dp"
     tools:context=".ui.home.ViewWorkoutFragment">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/emptyLayout"
         android:layout_width="0dp"

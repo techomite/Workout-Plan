@@ -2,18 +2,20 @@ package com.andromite.workoutplan.ui.home
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.andromite.workoutplan.databinding.FragmentViewWorkoutBinding
+import com.andromite.workoutplan.network.models.Workout
 import com.andromite.workoutplan.ui.workout.EditWorkoutActivity
 import com.andromite.workoutplan.utils.FireStoreUtils
 import com.andromite.workoutplan.utils.Utils
 import com.andromite.workoutplan.utils.WorkoutHelper
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class ViewWorkoutFragment : Fragment() {
@@ -39,11 +41,11 @@ class ViewWorkoutFragment : Fragment() {
         }
 
         binding.selectExistingButton.setOnClickListener {
-            val intent = Intent(requireContext(), EditWorkoutActivity::class.java)
-            intent.putExtra("type","update")
-            intent.putExtra("date", Utils().getFormattedDate(Date()))
-            startActivity(intent)
-//            Toast.makeText(requireContext(), "Coming Soon", Toast.LENGTH_SHORT).show()
+//            val intent = Intent(requireContext(), EditWorkoutActivity::class.java)
+//            intent.putExtra("type","update")
+//            intent.putExtra("date", Utils().getFormattedDate(Date()))
+//            startActivity(intent)
+            Toast.makeText(requireContext(), "Coming Soon", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -52,30 +54,31 @@ class ViewWorkoutFragment : Fragment() {
         FireStoreUtils().readWorkoutList(requireContext(), Utils().getFormattedDate(Date())){
             val selectedWorkoutList = WorkoutHelper.getSelectedWorkoutList(it)
 
-
             if (selectedWorkoutList.isNotEmpty()) {
-
-                showEmptyLayout()
-
-//                for (i in selectedWorkoutList.indices) {
-//                    Log.e("asdfasdf", "type: ${selectedWorkoutList[i].type}")
-//                    if (selectedWorkoutList[i].workoutList?.isNotEmpty() == true) {
-//                        for (j in selectedWorkoutList[i].workoutList?.indices!!) {
-//                            Log.e(
-//                                "asdfasdf",
-//                                "workout name: ${selectedWorkoutList[i].workoutList?.get(j)?.name}"
-//                            )
-//                        }
-//                    }
-//                }
+                showRV()
+                val finalList = ArrayList<Workout>()
+                for (item in selectedWorkoutList){
+                    finalList.addAll(item.workoutList)
+                }
+                initRV(finalList)
             } else {
                 showEmptyLayout()
             }
         }
     }
 
+    fun initRV(selectedWorkoutList: ArrayList<Workout>) {
+        binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerview.adapter = ViewWorkoutListAdapter(selectedWorkoutList)
+    }
+
     private fun showEmptyLayout() {
         binding.progressBar.visibility = View.GONE
         binding.emptyLayout.visibility = View.VISIBLE
+    }
+
+    private fun showRV() {
+        binding.progressBar.visibility = View.GONE
+        binding.recyclerview.visibility = View.VISIBLE
     }
 }

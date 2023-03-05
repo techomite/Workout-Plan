@@ -8,5 +8,7 @@ data class Workout(
     val name: String? = null,
     @SerializedName("sets")
     val sets: Int? = null,
+    @SerializedName("type")
+    val type: String? = null,
     var checked : Boolean = false
 )
