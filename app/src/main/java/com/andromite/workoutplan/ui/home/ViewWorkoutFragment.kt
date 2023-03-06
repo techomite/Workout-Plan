@@ -71,6 +71,7 @@ class ViewWorkoutFragment : Fragment() {
     private fun getWorkoutList() {
         binding.progressBar.visibility = View.VISIBLE
         FireStoreUtils().readWorkoutList(requireContext(), Utils().getFormattedDate(Date())){
+            showUpdateAndDelete()
             val selectedWorkoutList = WorkoutHelper.getSelectedWorkoutList(it)
 
             if (selectedWorkoutList.isNotEmpty()) {
@@ -100,6 +101,7 @@ class ViewWorkoutFragment : Fragment() {
     private fun showEmptyLayout() {
         binding.progressBar.visibility = View.GONE
         binding.emptyLayout.visibility = View.VISIBLE
+        hideUpdateAndDelete()
     }
 
     private fun hideEmptyLayout() {
@@ -115,5 +117,15 @@ class ViewWorkoutFragment : Fragment() {
     private fun hideRV() {
         binding.progressBar.visibility = View.VISIBLE
         binding.recyclerview.visibility = View.GONE
+    }
+
+    private fun showUpdateAndDelete() {
+        binding.updateButton.visibility = View.VISIBLE
+        binding.deleteButton.visibility = View.VISIBLE
+    }
+
+    private fun hideUpdateAndDelete() {
+        binding.updateButton.visibility = View.GONE
+        binding.deleteButton.visibility = View.GONE
     }
 }
