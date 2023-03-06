@@ -20,10 +20,8 @@ class ViewWorkoutListAdapter(var selectedWorkoutList: ArrayList<Workout>) : Recy
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.nameTextView.text = selectedWorkoutList[position].name
-        val type = "TYPE: " +selectedWorkoutList[position].type
-        holder.typeTextView.text = type
-        val sets = "SETS: " +selectedWorkoutList[position].sets
-        holder.setsTextView.text = sets
+        holder.typeTextView.text = selectedWorkoutList[position].type
+        holder.setsTextView.text = selectedWorkoutList[position].sets.toString()
     }
 
     override fun getItemCount(): Int {

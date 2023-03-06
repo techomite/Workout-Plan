@@ -1,8 +1,10 @@
 package com.andromite.workoutplan.ui.workout
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.andromite.workoutplan.databinding.ActivityEditWorkoutBinding
 import com.andromite.workoutplan.network.models.WorkoutListItem
@@ -17,6 +19,7 @@ import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class EditWorkoutActivity : AppCompatActivity() {
@@ -62,7 +65,17 @@ class EditWorkoutActivity : AppCompatActivity() {
             Utils.floge("save button final list: ${viewModel.getWorkoutList()}")
             val gson = Gson()
             val string = gson.toJson(viewModel.getWorkoutList())
-            FireStoreUtils().addOrUpdateWorkoutList(this, Utils().getFormattedDate(Date()),string)
+            FireStoreUtils().addOrUpdateWorkoutList(this, Utils().getFormattedDate(Date()),string) {
+                if (it == "success") {
+                    val returnIntent = Intent()
+                    setResult(RESULT_OK, returnIntent)
+                    finish()
+                } else {
+                    Toast.makeText(this, "Error", Toast.LENGTH_SHORT)
+                }
+            }
+
+
         }
     }
 

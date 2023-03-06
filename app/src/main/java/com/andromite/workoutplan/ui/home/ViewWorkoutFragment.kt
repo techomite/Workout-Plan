@@ -1,11 +1,13 @@
 package com.andromite.workoutplan.ui.home
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.andromite.workoutplan.databinding.FragmentViewWorkoutBinding
@@ -37,15 +39,32 @@ class ViewWorkoutFragment : Fragment() {
             val intent = Intent(requireContext(), EditWorkoutActivity::class.java)
             intent.putExtra("type","new")
             intent.putExtra("date", Utils().getFormattedDate(Date()))
-            startActivity(intent)
+            resultLauncher.launch(intent)
         }
 
         binding.selectExistingButton.setOnClickListener {
-//            val intent = Intent(requireContext(), EditWorkoutActivity::class.java)
-//            intent.putExtra("type","update")
-//            intent.putExtra("date", Utils().getFormattedDate(Date()))
-//            startActivity(intent)
             Toast.makeText(requireContext(), "Coming Soon", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.updateButton.setOnClickListener {
+            val intent = Intent(requireContext(), EditWorkoutActivity::class.java)
+            intent.putExtra("type","update")
+            intent.putExtra("date", Utils().getFormattedDate(Date()))
+            resultLauncher.launch(intent)
+        }
+
+        binding.deleteButton.setOnClickListener {
+            hideRV()
+            hideEmptyLayout()
+            deleteWorkoutList()
+        }
+    }
+
+    private var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == Activity.RESULT_OK) {
+            hideRV()
+            hideEmptyLayout()
+            getWorkoutList()
         }
     }
 
@@ -67,9 +86,15 @@ class ViewWorkoutFragment : Fragment() {
         }
     }
 
-    fun initRV(selectedWorkoutList: ArrayList<Workout>) {
+    private fun initRV(selectedWorkoutList: ArrayList<Workout>) {
         binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerview.adapter = ViewWorkoutListAdapter(selectedWorkoutList)
+    }
+
+    private fun deleteWorkoutList() {
+        FireStoreUtils().deleteWorkoutList(requireContext(), Utils().getFormattedDate(Date())) {
+            showEmptyLayout()
+        }
     }
 
     private fun showEmptyLayout() {
@@ -77,8 +102,18 @@ class ViewWorkoutFragment : Fragment() {
         binding.emptyLayout.visibility = View.VISIBLE
     }
 
+    private fun hideEmptyLayout() {
+        binding.progressBar.visibility = View.VISIBLE
+        binding.emptyLayout.visibility = View.GONE
+    }
+
     private fun showRV() {
         binding.progressBar.visibility = View.GONE
         binding.recyclerview.visibility = View.VISIBLE
+    }
+
+    private fun hideRV() {
+        binding.progressBar.visibility = View.VISIBLE
+        binding.recyclerview.visibility = View.GONE
     }
 }
